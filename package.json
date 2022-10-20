@@ -1,6 +1,19 @@
 {
   "name": "md-links",
   "version": "0.1.0",
+  "description": "library for extracting and validating links from a markdawn file",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test":""
+  },
+  "keywords": [],
+  "author": "Paola Rosano <paodiazglez.pdgr@gmail.com>",
+  "license": "MIT",
+  "type": "commonjs",
   "engines": {
     "node": ">=16.x"
   }
