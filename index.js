@@ -1,4 +1,5 @@
 
-const {readContent} = require('./readFile.js');
+const {extractLinks, responsePromise} = require('./readFile.js');
 
-readContent();
+extractLinks();
+responsePromise();

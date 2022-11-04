@@ -8,13 +8,21 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test":""
+    "test": ""
   },
   "keywords": [],
   "author": "Paola Rosano <paodiazglez.pdgr@gmail.com>",
   "license": "MIT",
   "type": "commonjs",
-  "engines": {
-    "node": ">=16.x"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaoRoss/CDMX013-md-links.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PaoRoss/CDMX013-md-links/issues"
+  },
+  "homepage": "https://github.com/PaoRoss/CDMX013-md-links#readme",
+  "dependencies": {
+    "fetch": "^1.1.0"
   }
 }
