@@ -7,26 +7,26 @@ const  fileExtension = path.extname(inputFilePath);
 const fileContent = fs.readFileSync(inputFilePath, 'utf8');
 console.log(fileContent)
 
-console.log('La ruta del archivo es: ', inputFilePath)
-console.log('El archivo tiene extensión', fileExtension)
+console.log('The file path is: ', inputFilePath)
+console.log('The file extension is: ', fileExtension)
 
 const extractLinks = () => {
     const regex = /(https?):\/\/(\w+:{0,1}\w*)?(\S+)(\w)(:[0-9]+)?([\w#!:.?+=&%@!\-\/])?/g;
     const arrayLinks = [];
 
         if(fileExtension !== '.md'){
-            console.log('No es un archivo Markdown')
+            console.log('This is not a Markdown file')
             } else {
                 const matchLinks = fileContent.match(regex);
                 console.log(matchLinks);
 
-                matchLinks.map(link => {
-                    let objprueba = {
+                matchLinks.forEach(link => {
+                    let objectForLinks = {
                         href: link,
                         path: inputFilePath,
-                        text: link[0]
+                        text: 'lo que esta dentro de <a>'
                     }
-                    arrayLinks.push(objprueba)
+                    arrayLinks.push(objectForLinks)
             })
             console.log(arrayLinks)
             return arrayLinks;
@@ -35,8 +35,8 @@ const extractLinks = () => {
 }
 extractLinks();
 
-const responsePromise = () => {
-        fetch('https://docs.npmjs.com/getting-started/publishing-npm-packages')
+const validateLinks = () => {
+        fetch('https://nodejs.org/api/path.htmlllllllll')
         .then(response =>  {
             let objectArr = {
                 href: response.url,
@@ -46,9 +46,9 @@ const responsePromise = () => {
         console.log('holappp',objectArr);
         }).catch(error =>  console.log('hola',error))
     }
-responsePromise();
+    validateLinks();
 
 module.exports = {
     extractLinks,
-    responsePromise
+    validateLinks
 }
