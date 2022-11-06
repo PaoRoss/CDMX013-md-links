@@ -1,5 +1,5 @@
 
-const {extractLinks, validateLinks} = require('./readFile.js');
+const {extractLinks, validateLinks} = require('./getValidateLinks.js');
 
 extractLinks();
 validateLinks();
