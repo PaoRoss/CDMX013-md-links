@@ -1,23 +1,24 @@
-const fs = require('fs')
-const process = require('process')
+const { rejects } = require('assert');
+const fs = require('fs');
+const { resolve } = require('path');
+//const process = require('process')
 const path = require('path');
 
-const inputFilePath = process.argv[2];
-const fileExtension = path.extname(inputFilePath);
-console.log('The file path is: ', inputFilePath)
-console.log('The file extension is: ', fileExtension)
 
+const fileExtension = (filePath) => path.extname(filePath);
+//console.log('The file path is: ', inputFilePath)
+//console.log('The file extension is: ', fileExtension)
 
-const extractLinks = () => {
-    const fileContent = fs.readFileSync(inputFilePath, 'utf8');
-    console.log(fileContent)
+const extractLinks = (path) => {
+    const fileContent = fs.readFileSync(path, 'utf8');
+    //console.log(fileContent)
 
     const regex = /\[(.+)\]\(https?:\/\/([a-zA-Z0-9_])?(\S+)(\w)/g;
 
     const matchLinks = fileContent.match(regex);
-    console.log(matchLinks);
+    //console.log(matchLinks);
     const links = matchLinks.filter(link => link.includes('http'));
-    console.log(links);
+    //console.log(links);
     const description = [];
     const arrayLinks = [];
 
@@ -25,31 +26,72 @@ const extractLinks = () => {
         arrayLinks.push(link.split(']('));
     });
     arrayLinks.forEach(link => {
-        const object = {
+        const objectforLinks = {
             href: link[1],
             text: link[0].replace('[', ''),
-            file: inputFilePath
+            file: path
         }
-        description.push(object);
-        console.log(description)
+        description.push(objectforLinks);
+        //console.log(description)
     })
+    //console.log(description)
     return description;
 }
 
-const validateLinks = (link) => {
-    fetch('https://www.youtube.com/watch?v=Lub5qOmY4JQ')
-        .then(response => {
-            let objectArr = {
-                href: response.url,
-                file: inputFilePath,
+const validateLinks = (objectforLinks) => {
+     let request = fetch(objectforLinks.href);
+       return request.then(response => {
+        if(response.status === 200){
+            let validateLinkObject = {
+                ...objectforLinks,
                 status: response.status,
-                statusText: response.statusText
+                statusText: 'ok'
             }
-            console.log('holappp', objectArr);
-        }).catch(error => console.log('hola', error))
+            console.log('Ok', validateLinkObject)
+            return validateLinkObject
+        } else {
+            let validateLinkObject = {
+                ...objectforLinks,
+                status: response.status,
+                statusText: 'fail'
+            }
+            console.log('Fail 404', validateLinkObject)
+            return validateLinkObject
+        }
+            
+        }).catch(error => { 
+            let validateLinkObject = {
+                ...objectforLinks,
+                status: error.cause.errno,
+                statusText: 'fail'
+            }
+            console.log('faaaiiilll!!!!', validateLinkObject)
+                return validateLinkObject
+            })
+
 }
 
+const obtainStats = (links) => {
+
+ const totalLinks = links.map(link => link.href);
+
+const uniqueLinks = [...new Set(links.map(link => link.href))]
+
+
+const stats = {
+    total: totalLinks.length,
+    unique: uniqueLinks.length,
+    repited: 'in process'
+}
+    console.log(stats)
+    return stats
+ 
+}
+
+
 module.exports = {
+    fileExtension,
     extractLinks,
-    validateLinks
+    validateLinks,
+    obtainStats
 }
