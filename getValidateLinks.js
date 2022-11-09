@@ -1,8 +1,7 @@
-const { rejects } = require('assert');
 const fs = require('fs');
-const { resolve } = require('path');
 //const process = require('process')
 const path = require('path');
+
 
 
 const fileExtension = (filePath) => path.extname(filePath);
@@ -32,22 +31,23 @@ const extractLinks = (path) => {
             file: path
         }
         description.push(objectforLinks);
-        //console.log(description)
+        return objectforLinks
     })
     //console.log(description)
     return description;
 }
 
 const validateLinks = (objectforLinks) => {
+    
      let request = fetch(objectforLinks.href);
-       return request.then(response => {
+       let validateLinkObject = request.then(response => {
         if(response.status === 200){
+            
             let validateLinkObject = {
                 ...objectforLinks,
                 status: response.status,
                 statusText: 'ok'
             }
-            console.log('Ok', validateLinkObject)
             return validateLinkObject
         } else {
             let validateLinkObject = {
@@ -55,43 +55,49 @@ const validateLinks = (objectforLinks) => {
                 status: response.status,
                 statusText: 'fail'
             }
-            console.log('Fail 404', validateLinkObject)
             return validateLinkObject
         }
-            
         }).catch(error => { 
             let validateLinkObject = {
                 ...objectforLinks,
-                status: error.cause.errno,
+                cause: error.cause.errno,
                 statusText: 'fail'
             }
-            console.log('faaaiiilll!!!!', validateLinkObject)
-                return validateLinkObject
+            return validateLinkObject
             })
-
+        return validateLinkObject
 }
 
 const obtainStats = (links) => {
 
- const totalLinks = links.map(link => link.href);
+const totalLinks = links.map((link) => link);
+ 
 
-const uniqueLinks = [...new Set(links.map(link => link.href))]
-
+const uniqueLinks = [...new Set(links.map((link) => link.href))]
 
 const stats = {
     total: totalLinks.length,
     unique: uniqueLinks.length,
-    repited: 'in process'
 }
-    console.log(stats)
     return stats
- 
 }
-
+const statsAndValidate = (links) => {
+    const statsLinks = obtainStats(links);
+    const filterBrokenLink = links.filter(link => link.status !== 200);
+    console.log(links.filter(link => link.status !== 200))
+    let result = {
+        total:links.length,
+        unique: statsLinks.unique,
+        broken: filterBrokenLink.length
+    }
+    console.log(result)
+    return result
+}
 
 module.exports = {
     fileExtension,
     extractLinks,
     validateLinks,
-    obtainStats
+    obtainStats,
+    statsAndValidate
 }

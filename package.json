@@ -12,7 +12,10 @@
   },
   "keywords": [],
   "author": "Paola Rosano <paodiazglez.pdgr@gmail.com>",
-  "license": "MIT",
+  "license": "ISC",
+  "bin": {
+    "md-links": "cli.js"
+  },
   "type": "commonjs",
   "repository": {
     "type": "git",

@@ -1,5 +1,5 @@
 
-const {extractLinks, fileExtension, validateLinks, obtainStats} = require('./getValidateLinks.js');
+const {extractLinks, fileExtension, validateLinks, obtainStats, statsAndValidate} = require('./getValidateLinks.js');
 const process = require('process');
 
 
@@ -8,21 +8,44 @@ const inputFilePath = process.argv[2];
 
 const mdLinks = (path, options) => {
     const fileExt = fileExtension(path)
-    //console.log(fileExtension(path))
-    if(fileExt !== '.md'){
-        console.log('This is not a .md file')
-    } 
-    if (fileExt === '.md'){
-            let allLinks = extractLinks(path);
-            let prueba = allLinks.map(link => validateLinks(link));
-            //console.log(prueba)
-            obtainStats(prueba);
 
+    return new Promise((resolve, reject) => {
+        if (fileExt === '.md'){
+            if(options.validate === true){
+                let arrayDescriptions = extractLinks(path); // array of objects with links without fetch
+                let requestArray = arrayDescriptions.map(element => validateLinks(element));
+                let allRequest = Promise.all(requestArray)
+                resolve(allRequest)
 
+            }else if(options.stats === true){
+                let arrayDescriptions = extractLinks(path); // array of objects with links without fetch
+                let stats = obtainStats(arrayDescriptions);
+                resolve(stats)
+                
+            } else if(options.validate === true && options.stats === true){
+                let arrayDescriptions = extractLinks(path); // array of objects with links without fetch
+                let requestArray = arrayDescriptions.map(element => validateLinks(element));
+                let allRequest = Promise.all(requestArray)
+                let getResult = allRequest.then((resolve) => statsAndValidate(resolve))
+                resolve(getResult)
+
+            }else {
+                let arrayDescriptions = extractLinks(path); // array of objects with links without fetch
+                resolve(arrayDescriptions)
+            }
+
+        } else {
+            reject('Error: this is not a .md file!')
         }
 
         
+    })
+    
 }
-mdLinks(inputFilePath);
+//const result = mdLinks(inputFilePath);
+
 //extractLinks();
 //validateLinks();
+module.exports = {
+    mdLinks
+}
