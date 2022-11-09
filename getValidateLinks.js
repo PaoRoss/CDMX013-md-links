@@ -60,7 +60,7 @@ const validateLinks = (objectforLinks) => {
         }).catch(error => { 
             let validateLinkObject = {
                 ...objectforLinks,
-                cause: error.cause.errno,
+                status: error.cause.errno,
                 statusText: 'fail'
             }
             return validateLinkObject
@@ -81,6 +81,7 @@ const stats = {
 }
     return stats
 }
+
 const statsAndValidate = (links) => {
     const statsLinks = obtainStats(links);
     const filterBrokenLink = links.filter(link => link.status !== 200);

@@ -29,7 +29,7 @@ const mdLinks = (path, options) => {
                 let getResult = allRequest.then((resolve) => statsAndValidate(resolve))
                 resolve(getResult)
 
-            }else {
+            } else {
                 let arrayDescriptions = extractLinks(path); // array of objects with links without fetch
                 resolve(arrayDescriptions)
             }
