@@ -85,13 +85,11 @@ const stats = {
 const statsAndValidate = (links) => {
     const statsLinks = obtainStats(links);
     const filterBrokenLink = links.filter(link => link.status !== 200);
-    console.log(links.filter(link => link.status !== 200))
     let result = {
-        total:links.length,
+        total: links.length,
         unique: statsLinks.unique,
         broken: filterBrokenLink.length
     }
-    console.log(result)
     return result
 }
 
